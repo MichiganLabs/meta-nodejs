@@ -1,6 +1,5 @@
 DESCRIPTION = "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE = "http://nodejs.org"
-
 LICENSE = "MIT"
 
 COMPATIBLE_MACHINE_armv4 = "(!.*armv4).*"
@@ -13,7 +12,9 @@ PR = "${INC_PR}.4"
 PROVIDES = "node"
 RPROVIDES_${PN} = "node"
 
-SRC_URI = "https://nodejs.org/dist/v${PV}/node-v${PV}.tar.gz;name=src"
+SRC_URI = "https://nodejs.org/dist/v${PV}/node-v${PV}.tar.gz;name=src \
+           file://0004-Configure-check-for-python3.patch \
+"
 
 S = "${WORKDIR}/node-v${PV}"
 
@@ -48,8 +49,10 @@ export CXXFLAGS_host = "${BUILD_CXXFLAGS}"
 export CFLAGS_host = "${BUILD_CFLAGS}"
 
 do_configure () {
+  export LD="${CXX}"
   GYP_DEFINES="${GYP_DEFINES}" export GYP_DEFINES
-  ./configure --prefix="${prefix}" \
+  python3 configure.py \
+    --prefix="${prefix}" \
     --dest-cpu="${@nodejs_map_dest_cpu(d.getVar('TARGET_ARCH', True), d)}" \
     --dest-os=linux ${ARCHFLAGS} \
     ${CROSSCONF} \
@@ -57,6 +60,7 @@ do_configure () {
 }
 
 do_compile () {
+  export LD="${CXX}"
   oe_runmake BUILDTYPE=Release
 }
 

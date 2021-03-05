@@ -1,0 +1,9 @@
+diff --git a/configure b/configure
+@@ -11,6 +11,7 @@
+ which python3.7 >/dev/null && exec python3.7 "$0" "$@"
+ which python3.6 >/dev/null && exec python3.6 "$0" "$@"
+ which python3.5 >/dev/null && exec python3.5 "$0" "$@"
++which python3 >/dev/null && exec python3 "$0" "$@"
+ which python2.7 >/dev/null && exec python2.7 "$0" "$@"
+ exec python "$0" "$@"
+ ''' "$0" "$@"
